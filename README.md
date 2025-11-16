@@ -1,2 +1,2 @@
 # ArchSentinel
-Seecurity Automation Framework for linux
+Security Automation Framework for linux
