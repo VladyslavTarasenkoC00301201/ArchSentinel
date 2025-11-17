@@ -1,0 +1,23 @@
+file: /etc/ssh/sshd_config
+
+checks:
+  - id: ssh_root_login
+    description: "Root SSH login must be disabled"
+    key: "PermitRootLogin"
+    expected:
+      audit: "yes"
+      flexible-secure: "prohibit-password"
+      strict: "no"
+    default: "yes"
+    weight: 5
+
+  - id: ssh_password_auth
+    description: "Password authentication should be disabled"
+    key: "PasswordAuthentication"
+    expected:
+      audit: "yes"
+      flexible-secure: "no"
+      strict: "no"
+    default: "yes"
+    weight: 4
+

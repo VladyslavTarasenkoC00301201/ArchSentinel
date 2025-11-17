@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archsentinel"
+version = "0.1.0"
+description = "ArchSentinel - Automated Linux security scanner and hardening toolkit."
+authors = [
+	{ name = "Vladyslav Tarasenko, Arsen Sanahurskyi" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+	"pyyaml>=6.0"
+]
+
+[project.scripts]
+sentinel = "sentinel.cli:main"
