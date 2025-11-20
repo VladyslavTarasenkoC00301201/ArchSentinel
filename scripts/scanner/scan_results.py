@@ -1,5 +1,9 @@
 from dataclasses import dataclass
 from typing import Optional
+import score
+
+
+
 
 @dataclass
 class ScanResult:
@@ -10,10 +14,11 @@ class ScanResult:
     description: str    # human-readable explanation
 
 
+
 class ScanResults:
-    def __init__(self, config, rules):
-        self.config = config
-        self.rules = rules
+    def __init__(self):
+        self.results: Optional[ScanResult] = None
+        self.score = Score()
 
 
     def run_checks(self):
