@@ -1,4 +1,4 @@
-from scan_results import ScanResult
+from .scan_results import ScanResult
 
 
 
@@ -12,7 +12,6 @@ class Score:
 
     def add_ok(self):
         self.ok += 1
-        self.total +=1
 
 
     def add_total(self):
@@ -22,16 +21,16 @@ class Score:
     def calculate_score(self): 
         if self.total == 0: 
             return 0 
-        self.percents == (self.ok /self.total) * 100 
+        self.percents = (self.ok / self.total) * 100
         return self.percents
 
 
     def evaluate_results(self, results: list[ScanResult]): 
         for result in results: 
-            if resutl.status == "OK": 
+            if result.status == "OK": 
                 self.add_ok() 
             self.add_total()
-
+            
             
     def merge(self, other: "Score"): # used by ScanManager to produce sum of scores of different config scans ("Score" - forward referencing)
         self.ok += other.ok

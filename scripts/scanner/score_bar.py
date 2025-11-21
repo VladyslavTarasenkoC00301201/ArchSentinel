@@ -5,7 +5,7 @@ class ScoreBar:
     
 
     def display_bar(self):
-        filled = int(self.score * self.lenght / 100)
-        empty = length - filled
-        return "[" + "#" * filled + "-" * empty + f"] {self.percent:.0f}%"
+        filled = int(self.score * self.length / 100)
+        empty = self.length - filled
+        return "[" + "#" * filled + "-" * empty + f"] {self.score:.0f}%"
 

@@ -1,25 +1,24 @@
-from scan_results import ScanResult
-import parser
-import score
+from .scan_results import ScanResult
+from .parsed_config import ParsedConfig
+from .score import Score
 
 
 
 
 class Scan:
     def __init__(self, config_path, rules, scan_name):
-        self.scan_name = name
+        self.scan_name = scan_name
         self.scan_results: list[ScanResult] = []
-        self.score: Score | None = None
+        self.score = Score()
         self.config_path = config_path # path to config file
         self.rules = rules # rules to be used for checks, located in rules.py
         self.parsed_config = ParsedConfig(config_path).read_config()
    
 
     def update_score(self):
-        score = Score()
-        score.evaluate_results(self.scan_results)
-        self.score = score
-    
+        self.score.evaluate_results(self.scan_results)
+        self.score.calculate_score()
+
 
     def get_scan_results(self):
         return self.scan_results

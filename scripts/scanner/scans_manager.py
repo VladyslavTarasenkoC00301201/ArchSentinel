@@ -1,6 +1,7 @@
-from rules import ALL_RULLES
-from config_paths import CONFIG_PATHS
-import scan
+from .rules import ALL_RULES
+from .config_paths import CONFIG_PATHS
+from .scan import Scan
+from .score import Score
 
 
 
