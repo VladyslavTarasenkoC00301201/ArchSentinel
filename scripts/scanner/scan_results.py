@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-import score
+
 
 
 
@@ -15,36 +15,4 @@ class ScanResult:
 
 
 
-class ScanResults:
-    def __init__(self):
-        self.results: Optional[ScanResult] = None
-        self.score = Score()
 
-
-    def run_checks(self):
-        results: list[ScanResult] = []
-
-
-        for key, rule in self.rules.items():
-            expected = rule["expected"]
-            description = rule["description"]
-
-            current = self.config.get(key)
-
-            if current is None:
-                status = "MISSING"
-            elif current.lower() == expected.lower():
-                status = "OK"
-            else:
-                status = "BAD"
-
-        results.append(
-                ScanResult(
-                    key=key,
-                    current=current,
-                    expected=expected,
-                    status=status,
-                    description=description,
-                )
-        )
-        return results
