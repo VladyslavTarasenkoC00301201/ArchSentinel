@@ -36,10 +36,106 @@ SSH_RULES = {
     },
             }
 
-# ============================
-# Master rule set
-# ============================
+
+LOGIN_DEFS_RULES = {
+    "PASS_MAX_DAYS": {
+        "expected": "90",
+        "description": "Maximum password age"
+    },
+    "PASS_MIN_DAYS": {
+        "expected": "1",
+        "description": "Minimum days between password changes"
+    },
+    "PASS_WARN_AGE": {
+        "expected": "7",
+        "description": "Days before expiration to warn user"
+    },
+    "UID_MIN": {
+        "expected": "1000",
+        "description": "Minimum UID for normal user accounts"
+    },
+    "UMASK": {
+        "expected": "022",
+        "description": "Default file creation mask"
+    }
+}
+
+
+SYSCTL_RULES = {
+    "kernel.kptr_restrict": {
+        "expected": "2",
+        "description": "Hide kernel pointers"
+    },
+    "kernel.yama.ptrace_scope": {
+        "expected": "2",
+        "description": "Restrict ptrace"
+    },
+    "net.ipv4.ip_forward": {
+        "expected": "0",
+        "description": "Disable IPv4 forwarding"
+    },
+    "net.ipv4.conf.all.accept_redirects": {
+        "expected": "0",
+        "description": "Disable ICMP redirects"
+    },
+    "net.ipv4.conf.all.send_redirects": {
+        "expected": "0",
+        "description": "Disable sending redirects"
+    },
+}
+
+
+LIMITS_RULES = {
+    "nofile": {
+        "expected": "10000",
+        "description": "Max open files"
+    },
+    "nproc": {
+        "expected": "4096",
+        "description": "Max number of processes"
+    }
+}
+
+
+RESOLV_RULES = {
+    "nameserver": {
+        "expected": "1.1.1.1",
+        "description": "Preferred DNS server"
+    },
+    "options": {
+        "expected": "edns0",
+        "description": "DNS recommended options"
+    }
+}
+
+
+RSYSLOG_RULES = {
+    "module(load=\"imtcp\")": {
+        "expected": "yes",
+        "description": "TCP syslog module loaded"
+    },
+    "$ModLoad imuxsock": {
+        "expected": "",
+        "description": "Unix socket module loaded"
+    },
+    "$ModLoad imklog": {
+        "expected": "",
+        "description": "Kernel logging enabled"
+    },
+    "$ActionFileDefaultTemplate": {
+        "expected": "RSYSLOG_TraditionalFileFormat",
+        "description": "Standard file output template"
+    }
+}
+
+
+
 ALL_RULES = {
-    "ssh": SSH_RULES
+    "ssh": SSH_RULES,
+    "login_defs": LOGIN_DEFS_RULES,
+    "sysctl": SYSCTL_RULES,
+    "limits": LIMITS_RULES,
+    "resolv": RESOLV_RULES,
+    "rsyslog": RSYSLOG_RULES
 }
 

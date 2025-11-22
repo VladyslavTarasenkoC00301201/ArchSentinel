@@ -4,7 +4,7 @@ from .score_bar import ScoreBar
 
 
 manager = ScansManager()
-targets = ["ssh"]
+targets = ["ssh", "limits", "resolv", "login_defs", "sysctl", "rsyslog"]
 
 for target in targets:
     manager.run_scan(target)
