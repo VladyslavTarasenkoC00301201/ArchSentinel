@@ -1,0 +1,12 @@
+sources:
+  ssh:
+    parser: ssh
+    programs:
+      - sshd
+      - sshd-session
+
+  sudo:
+    parser: sudo
+    programs:
+      - sudo
+
