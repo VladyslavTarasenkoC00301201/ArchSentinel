@@ -26,6 +26,7 @@ def analyze_logs(
     if enabled_rules is None:
         enabled_rules = list(DETECTION_REGISTRY.keys())
 
+    # merge default config + overrides
     rule_configs: Dict[str, Dict] = {}
     rule_configs.update(DEFAULT_DETECTION_CONFIG)
     if rule_config_overrides:
@@ -37,7 +38,8 @@ def analyze_logs(
     detections: List[DetectionResult] = []
 
     for rule_id in enabled_rules:
-        rule_fn: DetectionFn = DETECTION_REGISTRY.get(rule_id)
+        # NOTE: no explicit type here; .get() can return None
+        rule_fn = DETECTION_REGISTRY.get(rule_id)
         if rule_fn is None:
             continue
         cfg = rule_configs.get(rule_id, {})
@@ -78,8 +80,10 @@ def _parse_cli_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--rules",
-        help="Comma-separated list of rule IDs to run "
-        f"(available: {', '.join(sorted(DETECTION_REGISTRY.keys()))})",
+        help=(
+            "Comma-separated list of rule IDs to run "
+            f"(available: {', '.join(sorted(DETECTION_REGISTRY.keys()))})"
+        ),
         default=None,
     )
     parser.add_argument(
