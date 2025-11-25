@@ -1,0 +1,50 @@
+rules:
+  # ---------------------------------------------------------
+  # SSH: invalid user (extra on top of built-in detections)
+  # ---------------------------------------------------------
+  - id: ssh_invalid_user
+    description: "SSH login attempts for an invalid user"
+    severity: medium
+    match:
+      source: ssh
+      fields:
+        status: failed
+        user_type: invalid
+    evidence: "Failed SSH login for invalid user {user} from {ip}"
+
+  # ---------------------------------------------------------
+  # sudo: any root command
+  # ---------------------------------------------------------
+  - id: sudo_any_root_cmd
+    description: "Any sudo command targeting root"
+    severity: medium
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+    evidence: "sudo command targeting root user {target_user} by {user}"
+
+  # sudo: any root command (high severity mirror)
+  - id: sudo_root_shell_any
+    description: "sudo to root that runs any command (not just shells)"
+    severity: high
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+    evidence: "event(s) matched user rule 'sudo_root_shell_any'"
+
+  # ---------------------------------------------------------
+  # NetworkManager: interface disconnect
+  # ---------------------------------------------------------
+  - id: nm_iface_disconnected
+    description: "Network interface disconnected (NetworkManager)"
+    severity: low
+    match:
+      source: networkmanager
+      fields:
+        status: disconnected
+    evidence: "Interface {iface} reported disconnected by NetworkManager"
+

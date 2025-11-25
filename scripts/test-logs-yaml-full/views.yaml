@@ -1,0 +1,51 @@
+views:
+  default:
+    sort:
+      by: timestamp
+      order: asc
+    # 0 = show all related events
+    max_events_per_detection: 0
+    per_source:
+      ssh:
+        show_fields:
+          - timestamp
+          - host
+          - user
+          - ip
+          - status
+      sudo:
+        show_fields:
+          - timestamp
+          - host
+          - user
+          - target_user
+          - command
+      networkmanager:
+        show_fields:
+          - timestamp
+          - host
+          - iface
+          - status
+
+  compact:
+    sort:
+      by: timestamp
+      order: asc
+    max_events_per_detection: 5
+    per_source:
+      ssh:
+        show_fields:
+          - timestamp
+          - user
+          - ip
+      sudo:
+        show_fields:
+          - timestamp
+          - user
+          - command
+      networkmanager:
+        show_fields:
+          - timestamp
+          - iface
+          - status
+

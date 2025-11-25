@@ -1,0 +1,61 @@
+log_input:
+  # auto  = prefer file if it exists, else journal
+  # file  = always use the file below
+  # journal = always use journalctl
+  mode: journal
+
+  # If you ever want to force a file, put the path here and use mode: file
+  file:
+
+  journal:
+    # Systemd units to read from
+    units:
+      - sshd
+      - sshd-session
+      - sudo
+      - NetworkManager        #  new unit
+    # How many lines to read from journalctl
+    max_lines: 5000
+
+sources:
+  # ---------------------------------------------------------
+  # SSH authentication events
+  # ---------------------------------------------------------
+  ssh:
+    parser: ssh
+    programs:
+      - sshd
+      - sshd-session
+
+  # ---------------------------------------------------------
+  # sudo commands (built-in sudo parser)
+  # ---------------------------------------------------------
+  sudo:
+    parser: sudo
+    programs:
+      - sudo
+
+  # ---------------------------------------------------------
+  # NetworkManager via generic YAML-driven parser
+  # ---------------------------------------------------------
+  networkmanager:
+    parser: generic
+    programs:
+      - NetworkManager
+    patterns:
+      # Typical messages like:
+      #   wlp2s0: disconnected
+      - id: nm_iface_disconnected
+        regex: "(?P<iface>\\S+): disconnected"
+        status: disconnected
+        fields:
+          iface: "{iface}"
+
+      # Typical messages like:
+      #   wlp2s0: connected
+      - id: nm_iface_connected
+        regex: "(?P<iface>\\S+): connected"
+        status: connected
+        fields:
+          iface: "{iface}"
+
