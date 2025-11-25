@@ -4,8 +4,8 @@ from .score_bar import ScoreBar
 from .vulnerable_configs import VulnerableConfigs
 
 manager = ScansManager()
-targets = ["ssh", "limits", "resolv", "login_defs", "sysctl", "rsyslog"]
-
+#targets = ["ssh", "limits", "resolv", "login_defs", "sysctl", "rsyslog"]
+targets = ["ssh"]
 for target in targets:
     manager.run_scan(target)
 
