@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import timedelta
 from typing import Callable, Dict, List
 
-from results import (
+from .results import (
     LogEvent,
     DetectionResult,
     SEVERITY_LOW,

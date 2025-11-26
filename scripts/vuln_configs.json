@@ -1,122 +1,26 @@
 [
   {
-    "scan_name": "limits",
-    "key": "nofile",
-    "current": null,
-    "expected": "10000",
-    "description": "Max open files",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "limits",
-    "key": "nproc",
-    "current": null,
-    "expected": "4096",
-    "description": "Max number of processes",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "resolv",
-    "key": "nameserver",
-    "current": "127.0.0.53",
-    "expected": "1.1.1.1",
-    "description": "Preferred DNS server",
+    "scan_name": "ssh",
+    "key": "MaxAuthTries",
+    "current": "6",
+    "expected": "3",
+    "description": "Reduce login attempts. Defence against bruteforcing",
     "status": "BAD"
   },
   {
-    "scan_name": "resolv",
-    "key": "options",
-    "current": "edns0 trust-ad",
-    "expected": "edns0",
-    "description": "DNS recommended options",
+    "scan_name": "ssh",
+    "key": "LoginGraceTime",
+    "current": "50",
+    "expected": "30",
+    "description": "Reduce the duration of half-open connections, reduces DoS angles",
     "status": "BAD"
   },
   {
-    "scan_name": "login_defs",
-    "key": "PASS_MAX_DAYS",
-    "current": "99999",
-    "expected": "90",
-    "description": "Maximum password age",
+    "scan_name": "ssh",
+    "key": "AllowTcpForwarding",
+    "current": "yes",
+    "expected": "no",
+    "description": "Allows to connect to the internet bypass network segmentation and firewall, should be disabled unless explicitly needed",
     "status": "BAD"
-  },
-  {
-    "scan_name": "login_defs",
-    "key": "PASS_MIN_DAYS",
-    "current": "0",
-    "expected": "1",
-    "description": "Minimum days between password changes",
-    "status": "BAD"
-  },
-  {
-    "scan_name": "sysctl",
-    "key": "kernel.kptr_restrict",
-    "current": null,
-    "expected": "2",
-    "description": "Hide kernel pointers",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "sysctl",
-    "key": "kernel.yama.ptrace_scope",
-    "current": null,
-    "expected": "2",
-    "description": "Restrict ptrace",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "sysctl",
-    "key": "net.ipv4.ip_forward",
-    "current": null,
-    "expected": "0",
-    "description": "Disable IPv4 forwarding",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "sysctl",
-    "key": "net.ipv4.conf.all.accept_redirects",
-    "current": null,
-    "expected": "0",
-    "description": "Disable ICMP redirects",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "sysctl",
-    "key": "net.ipv4.conf.all.send_redirects",
-    "current": null,
-    "expected": "0",
-    "description": "Disable sending redirects",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "rsyslog",
-    "key": "module(load=\"imtcp\")",
-    "current": null,
-    "expected": "yes",
-    "description": "TCP syslog module loaded",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "rsyslog",
-    "key": "$ModLoad imuxsock",
-    "current": null,
-    "expected": "",
-    "description": "Unix socket module loaded",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "rsyslog",
-    "key": "$ModLoad imklog",
-    "current": null,
-    "expected": "",
-    "description": "Kernel logging enabled",
-    "status": "MISSING"
-  },
-  {
-    "scan_name": "rsyslog",
-    "key": "$ActionFileDefaultTemplate",
-    "current": null,
-    "expected": "RSYSLOG_TraditionalFileFormat",
-    "description": "Standard file output template",
-    "status": "MISSING"
   }
 ]

@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from typing import Iterable, List, Optional
 
-from results import LogEvent
+from .results import LogEvent
 
 # Timestamp like: "Nov 24 15:47:29"
 TS_RE = re.compile(

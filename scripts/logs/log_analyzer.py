@@ -3,10 +3,10 @@ from __future__ import annotations
 import argparse
 from typing import Dict, List, Optional
 
-from results import DetectionResult, LogAnalysisResult
-from sources import read_auth_log
-from parser import parse_all_events
-from detections import DETECTION_REGISTRY, DEFAULT_DETECTION_CONFIG, DetectionFn
+from .results import DetectionResult, LogAnalysisResult
+from .sources import read_auth_log
+from .parser import parse_all_events
+from .detections import DETECTION_REGISTRY, DEFAULT_DETECTION_CONFIG, DetectionFn
 
 
 def analyze_logs(
