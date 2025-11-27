@@ -302,7 +302,7 @@ def main():
         }
     else:
         requested = args.view or "default"
-        print(requested)
+        print("Dispay view: ", requested)
         if requested not in views:
             print(
                 f"WARNING: view '{requested}' not found in views.yaml; "

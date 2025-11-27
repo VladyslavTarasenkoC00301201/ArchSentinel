@@ -51,6 +51,7 @@ class SentinelShell(cmd.Cmd):
     def help_scan(self):
         print(self.do_scan.__doc__)
 
+
     def do_exit(self, arg):
         """Exit ArchSentinel shell."""
         print("Exiting ArchSentinel.")
@@ -88,8 +89,15 @@ class SentinelShell(cmd.Cmd):
 
         Examples:
             logs
+            logs --view compact
+            logs --rules ssh_invali_user,sudo_any_root_chain,... (use to choose which rulse will be applied  )
+            logs --no-debug 
         """
         run_module("logs.log_analyzer", arg)
+
+
+    def help_logs(self):
+        print(self.do_logs.__doc__)
 
 
 def main():
