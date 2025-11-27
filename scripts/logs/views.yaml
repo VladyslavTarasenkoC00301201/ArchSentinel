@@ -4,7 +4,7 @@ views:
       by: timestamp
       order: asc
     # 0 = show all related events
-    max_events_per_detection: 0
+    max_events_per_detection: 10
     per_source:
       ssh:
         show_fields:
