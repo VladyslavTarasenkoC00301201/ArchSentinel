@@ -13,7 +13,7 @@ from .results import (
     SEVERITY_HIGH,
     SEVERITY_CRITICAL,
 )
-from config_loader import load_yaml_dict
+from .config_loader import load_yaml_dict
 
 
 DetectionFn = Callable[[List[LogEvent], Dict[str, Any]], List[DetectionResult]]
