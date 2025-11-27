@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List, Optional
 
+
 # ---- Severity constants (use these everywhere) ---- #
 SEVERITY_LOW = "low"
 SEVERITY_MEDIUM = "medium"
@@ -14,24 +15,32 @@ SEVERITY_CRITICAL = "critical"
 @dataclass
 class LogEvent:
     """
-    Normalized log event.
+    Normalised representation of a single log line.
 
-    - source: logical source ("ssh", "sudo", etc.)
-    - message: original log line
-    - fields: structured info (status, user, ip, port, target_user, command, etc.)
+    The parser is responsible for turning raw text into this structure so that
+    detection rules and views never need to care about the original format.
     """
     timestamp: datetime
+    # Logical source (e.g. "ssh", "sudo", "myapp"). This comes from the parser /
+    # source config and is what rules.yaml will normally filter on.
     source: str
+    # Raw syslog fields
     host: str
+    program: Optional[str]
     pid: Optional[int]
+    # Original full log line for reference / display
     message: str
+    # Normalised fields extracted from the message (user, ip, status, command, ...)
     fields: Dict[str, str]
 
 
 @dataclass
 class DetectionResult:
     """
-    Output of a single detection rule.
+    One detection produced by a rule.
+
+    A rule groups one or more LogEvent objects into a single finding with a
+    severity and human readable description.
     """
     id: str
     severity: str
@@ -44,6 +53,10 @@ class DetectionResult:
 class LogAnalysisResult:
     """
     Result of a complete log analysis run.
+
+    Holds both the parsed events and all detections so that other parts of the
+    application (CLI, future GUI, JSON exporter, etc.) can decide how to
+    present them.
     """
     events: List[LogEvent]
     detections: List[DetectionResult]
