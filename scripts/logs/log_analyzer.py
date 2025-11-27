@@ -285,9 +285,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[List[str]] = None) -> None:
+def main():
     parser = build_arg_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args()
 
     # Load views from YAML
     views = load_views()
@@ -302,6 +302,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         }
     else:
         requested = args.view or "default"
+        print(requested)
         if requested not in views:
             print(
                 f"WARNING: view '{requested}' not found in views.yaml; "
