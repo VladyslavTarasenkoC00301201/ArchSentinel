@@ -89,7 +89,7 @@ class SentinelShell(cmd.Cmd):
         Examples:
             logs
         """
-        run_module("logs.log_analyzer")
+        run_module("logs.log_analyzer", arg)
 
 
 def main():
