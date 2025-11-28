@@ -1,58 +1,64 @@
 log_input:
-  # auto  = prefer file if it exists, else journal
-  # file  = always use the file below
+  # auto    = prefer file if it exists, else journal
+  # file    = always use the file below
   # journal = always use journalctl
   mode: journal
 
-  # If you ever want to force a file, put the path here and use mode: file
+  # If you want to force a specific log file (e.g. custom auth.log), set it here
+  # and use mode: file.
   file:
 
   journal:
-    # Systemd units to read from
-    units:
-      - sshd
-      - sshd-session
-      - sudo
-      - NetworkManager        #  new unit
-    # How many lines to read from journalctl
-    max_lines: 5000
+    # [] => DO NOT filter by systemd unit.
+    # We read the journal and let parsers and grep decide what to keep.
+    units: []
+
+    # 0 => no -n argument => read ALL available journal entries
+    # (be careful on very old / busy systems – you can cap it if needed)
+    max_lines: 0
+
+    # Optional regex filter applied AFTER reading from journal.
+    # This keeps volume sane but still doesn’t depend on units.
+    grep: "(sshd|sshd-session|sudo|NetworkManager)"
+
+    # Optional time window. Uncomment if full history is too much:
+    # since: "-24h"       # examples: "-1h", "today", "2025-11-27 00:00:00"
+
 
 sources:
-  # ---------------------------------------------------------
-  # SSH authentication events
-  # ---------------------------------------------------------
+  # -----------------------------
+  # SSH via built-in SSH parser
+  # -----------------------------
   ssh:
     parser: ssh
     programs:
       - sshd
       - sshd-session
 
-  # ---------------------------------------------------------
-  # sudo commands (built-in sudo parser)
-  # ---------------------------------------------------------
+  # -----------------------------
+  # sudo via built-in sudo parser
+  # -----------------------------
   sudo:
     parser: sudo
     programs:
       - sudo
 
-  # ---------------------------------------------------------
-  # NetworkManager via generic YAML-driven parser
-  # ---------------------------------------------------------
+  # -----------------------------------------------
+  # NetworkManager via generic regex-based parser
+  # -----------------------------------------------
   networkmanager:
     parser: generic
     programs:
       - NetworkManager
     patterns:
-      # Typical messages like:
-      #   wlp2s0: disconnected
+      # Example line: "wlp2s0: disconnected"
       - id: nm_iface_disconnected
         regex: "(?P<iface>\\S+): disconnected"
         status: disconnected
         fields:
           iface: "{iface}"
 
-      # Typical messages like:
-      #   wlp2s0: connected
+      # Example line: "wlp2s0: connected"
       - id: nm_iface_connected
         regex: "(?P<iface>\\S+): connected"
         status: connected

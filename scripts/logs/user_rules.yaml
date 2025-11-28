@@ -1,20 +1,78 @@
 rules:
-  # ---------------------------------------------------------
-  # SSH: invalid user (extra on top of built-in detections)
-  # ---------------------------------------------------------
+  # ==========================================================
+  # SSH rules
+  # ==========================================================
+
+  # Invalid user attempts (extra on top of built-in brute force)
   - id: ssh_invalid_user
-    description: "SSH login attempts for an invalid user"
+    description: "SSH login attempts with invalid usernames"
     severity: medium
     match:
       source: ssh
       fields:
         status: failed
         user_type: invalid
-    evidence: "Failed SSH login for invalid user {user} from {ip}"
+    evidence: "Failed SSH login(s) with invalid usernames were observed."
 
-  # ---------------------------------------------------------
-  # sudo: any root command
-  # ---------------------------------------------------------
+  # Successful SSH root login (loud demo)
+  - id: ssh_root_login
+    description: "Successful SSH login as root"
+    severity: high
+    match:
+      source: ssh
+      fields:
+        status: accepted
+        user: root
+    evidence: "Root SSH login detected."
+
+  # Failed SSH root login
+  - id: ssh_failed_root_login
+    description: "Failed SSH login attempts as root"
+    severity: medium
+    match:
+      source: ssh
+      fields:
+        status: failed
+        user: root
+    evidence: "Failed SSH login(s) for root account detected."
+
+  # Any successful SSH login (low-severity visibility rule)
+  - id: ssh_any_success
+    description: "Any successful SSH login"
+    severity: low
+    match:
+      source: ssh
+      fields:
+        status: accepted
+    evidence: "Successful SSH login(s) were observed."
+
+  # SSH password auth usage (shows if keys vs passwords)
+  - id: ssh_password_auth
+    description: "SSH logins using password authentication"
+    severity: low
+    match:
+      source: ssh
+      fields:
+        status: accepted
+        method: password
+    evidence: "SSH password authentication was used."
+
+  # SSH from localhost (nice to demo quickly)
+  - id: ssh_from_localhost
+    description: "SSH logins from localhost"
+    severity: low
+    match:
+      source: ssh
+      fields:
+        status: accepted
+        ip: "127.0.0.1"
+    evidence: "SSH login(s) from localhost were observed."
+
+  # ==========================================================
+  # sudo rules
+  # ==========================================================
+
+  # Any sudo command as root target (generic visibility)
   - id: sudo_any_root_cmd
     description: "Any sudo command targeting root"
     severity: medium
@@ -23,22 +81,95 @@ rules:
       fields:
         status: sudo_command
         target_user: root
-    evidence: "sudo command targeting root user {target_user} by {user}"
+    evidence: "sudo command(s) targeting root user were executed."
 
-  # sudo: any root command (high severity mirror)
-  - id: sudo_root_shell_any
-    description: "sudo to root that runs any command (not just shells)"
+  # Any sudo command at all (low-level visibility)
+  - id: sudo_any_command
+    description: "Any sudo command"
+    severity: low
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+    evidence: "sudo command(s) were executed."
+
+  # Interactive root shell via sudo: bash
+  - id: sudo_root_shell_bash
+    description: "Interactive root shell via sudo (bash)"
     severity: high
     match:
       source: sudo
       fields:
         status: sudo_command
         target_user: root
-    evidence: "event(s) matched user rule 'sudo_root_shell_any'"
+        binary: bash
+    evidence: "sudo was used to start a root bash shell."
 
-  # ---------------------------------------------------------
-  # NetworkManager: interface disconnect
-  # ---------------------------------------------------------
+  # Interactive root shell via sudo: sh
+  - id: sudo_root_shell_sh
+    description: "Interactive root shell via sudo (sh)"
+    severity: high
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+        binary: sh
+    evidence: "sudo was used to start a root sh shell."
+
+  # Interactive root shell via sudo: zsh
+  - id: sudo_root_shell_zsh
+    description: "Interactive root shell via sudo (zsh)"
+    severity: high
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+        binary: zsh
+    evidence: "sudo was used to start a root zsh shell."
+
+  # Interactive root shell via sudo: fish
+  - id: sudo_root_shell_fish
+    description: "Interactive root shell via sudo (fish)"
+    severity: high
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+        binary: fish
+    evidence: "sudo was used to start a root fish shell."
+
+  # Docker via sudo as root (classic ‘danger’ demo)
+  - id: sudo_docker_as_root
+    description: "Docker command executed as root via sudo"
+    severity: high
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+        binary: docker
+    evidence: "sudo was used to run docker as root."
+
+  # pacman via sudo as root (package manager demo on Arch/derivatives)
+  - id: sudo_pacman_as_root
+    description: "Package manager (pacman) used via sudo as root"
+    severity: medium
+    match:
+      source: sudo
+      fields:
+        status: sudo_command
+        target_user: root
+        binary: pacman
+    evidence: "pacman was run via sudo as root."
+
+  # ==========================================================
+  # NetworkManager / connectivity rules
+  # ==========================================================
+
+  # Interface disconnects
   - id: nm_iface_disconnected
     description: "Network interface disconnected (NetworkManager)"
     severity: low
@@ -46,5 +177,15 @@ rules:
       source: networkmanager
       fields:
         status: disconnected
-    evidence: "Interface {iface} reported disconnected by NetworkManager"
+    evidence: "Interface disconnect event(s) reported by NetworkManager."
+
+  # Interface connects
+  - id: nm_iface_connected
+    description: "Network interface connected (NetworkManager)"
+    severity: low
+    match:
+      source: networkmanager
+      fields:
+        status: connected
+    evidence: "Interface connect event(s) reported by NetworkManager."
 

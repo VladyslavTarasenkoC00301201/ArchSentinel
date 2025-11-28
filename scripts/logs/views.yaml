@@ -1,9 +1,12 @@
 views:
+  # ------------------------------------------------------------------
+  # Default view – good for general use and demo screenshots
+  # ------------------------------------------------------------------
   default:
     sort:
       by: timestamp
       order: asc
-    # 0 = show all related events
+    # 0 = show all related events, otherwise cap per detection
     max_events_per_detection: 10
     per_source:
       ssh:
@@ -12,37 +15,103 @@ views:
           - host
           - user
           - ip
+          - port
           - status
+          - method
       sudo:
         show_fields:
           - timestamp
+          - user
+          - target_user
+          - binary
+          - command
+      networkmanager:
+        show_fields:
+          - timestamp
+          - iface
+          - status
+
+  # ------------------------------------------------------------------
+  # SSH-focused view – zoom in on SSH behaviour
+  # ------------------------------------------------------------------
+  ssh_focus:
+    sort:
+      by: timestamp
+      order: asc
+    max_events_per_detection: 20
+    per_source:
+      ssh:
+        show_fields:
+          - timestamp
           - host
+          - user
+          - ip
+          - port
+          - status
+          - method
+      sudo:
+        show_fields:
+          - timestamp
           - user
           - target_user
           - command
       networkmanager:
         show_fields:
           - timestamp
-          - host
           - iface
           - status
 
-  compact:
+  # ------------------------------------------------------------------
+  # sudo-focused view – emphasise privilege escalation activity
+  # ------------------------------------------------------------------
+  sudo_focus:
     sort:
       by: timestamp
-      order: asc
-    max_events_per_detection: 5
+      order: desc
+    max_events_per_detection: 20
     per_source:
       ssh:
         show_fields:
           - timestamp
+          - host
           - user
           - ip
+          - status
       sudo:
         show_fields:
           - timestamp
           - user
+          - target_user
+          - binary
           - command
+      networkmanager:
+        show_fields:
+          - timestamp
+          - iface
+          - status
+
+  # ------------------------------------------------------------------
+  # Network view – if you ever want to highlight connectivity stuff
+  # ------------------------------------------------------------------
+  network_focus:
+    sort:
+      by: timestamp
+      order: asc
+    max_events_per_detection: 50
+    per_source:
+      ssh:
+        show_fields:
+          - timestamp
+          - host
+          - user
+          - ip
+          - status
+      sudo:
+        show_fields:
+          - timestamp
+          - user
+          - target_user
+          - binary
       networkmanager:
         show_fields:
           - timestamp
